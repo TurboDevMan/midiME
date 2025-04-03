@@ -1,0 +1,85 @@
+        +--------------------+
+        |    index.html      |
+        | - Canvas element   |
+        | - Control buttons  |
+        | - Loads main.js    |
+        +---------+----------+
+                  |
+                  v
+        +--------------------+
+        |     main.js        |  <== App orchestrator
+        | - Initializes canvas
+        | - Handles playback controls
+        | - Calls animation loop
+        | - Imports MIDI, runway, notes
+        +--+---------+-------+
+           |         |
+           v         v
+  +---------------+  +------------------+
+  | midiLoader.js |  |  noteRenderer.js |
+  | - Parses MIDI |  | - Draws notes    |
+  | - Outputs     |  | - Uses key map   |
+  |   { note, start, duration }         |
+  +---------------+  +--------+---------+
+                               |
+                               v
+                      +------------------+
+                      |   runway.js      |
+                      | - Renders keys   |
+                      | - Provides layout|
+                      |   & keyMap       |
+                      +------------------+
+
+📜 Function Reference Index
+
+🔹 main.js
+	•	startPlayback()
+Starts the animation loop and playback timer.
+	•	pausePlayback()
+Stops the animation loop.
+	•	handleFileInput(event)
+Reads MIDI file and triggers parsing.
+	•	animate(timestamp)
+Main loop: clears canvas, updates time, calls draw functions.
+
+⸻
+
+🔹 midiLoader.js
+	•	parseMidiFile(arrayBuffer)
+Parses a MIDI file using Tone.js, returns normalized note data with pitch names like “C#4”.
+
+⸻
+
+🔹 runway.js
+	•	resizeCanvas(canvas)
+Resizes canvas and establishes baseline dimensions for layout.
+	•	generateKeyLayoutMap(canvasWidth)
+🔥 Core function!
+Generates key layout and lookup map of note names → visual properties (x, width, type).
+	•	drawRunway(ctx, canvas)
+Draws the piano keyboard onto the canvas using the layout.
+	•	[deprecated] generateWhiteKeyLayout(...)
+Previously used to generate only white keys before unified layout existed.
+	•	[deprecated] generateBlackKeyLayout(...)
+Used with white key layout to position black keys. Now superseded by generateKeyLayoutMap.
+	•	[internal] getWhiteKeyCount(...)
+Helper to count white keys between MIDI range.
+
+⸻
+
+🔹 noteRenderer.js
+	•	drawNotes(ctx, canvas, notes, currentTime)
+Draws falling notes in sync with current playback time. Uses generateKeyLayoutMap() to position each note by name.
+
+⸻
+
+🧰 Current Flow (Function Order)
+	1.	index.html loads
+	2.	main.js sets up canvas and event listeners
+	3.	MIDI file is chosen → handleFileInput()
+	4.	→ Calls parseMidiFile() from midiLoader.js
+	5.	→ Parsed notes stored in app state
+	6.	Play button triggers startPlayback()
+	7.	→ Animation loop begins:
+	•	drawRunway() from runway.js
+	•	drawNotes() from noteRenderer.js                   

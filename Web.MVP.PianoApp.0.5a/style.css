@@ -1,0 +1,40 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: #fafafa;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+/* 🎹 Canvas Setup */
+#myCanvas {
+  display: block;
+  width: 100%;
+  max-width: 1000px;
+  height: auto;
+  background-color: #eee;
+  border: 1px solid #ccc;
+}
+
+/* 🎛️ Controls Styling */
+#controls {
+  margin: 10px;
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+}
+
+button {
+  margin-left: 5px;
+  padding: 6px 12px;
+  font-size: 14px;
+  cursor: pointer;
+}
